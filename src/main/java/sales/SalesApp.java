@@ -16,7 +16,7 @@ public class SalesApp {
 		SalesReportDao salesReportDao = generateSalesReportDao();
 
 		Sales sales = salesDao.getSalesBySalesId(salesId);
-		
+
 		Date today = new Date();
 		if (!sales.isEffectiveToday(today)){
 			return;

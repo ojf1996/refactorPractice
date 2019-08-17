@@ -15,6 +15,10 @@ public class Sales {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public boolean isEffectiveToday(Date today) {
+		return today.after(this.getEffectiveTo())
+				|| today.before(this.getEffectiveFrom());
+	}
 
 	public boolean isSupervisor() {
 		return isSupervisor;
@@ -22,10 +26,5 @@ public class Sales {
 
 	public void setSupervisor(boolean isSupervisor) {
 		this.isSupervisor = isSupervisor;
-	}
-
-	public boolean isEffectiveToday(Date today) {
-		return today.after(this.getEffectiveTo())
-				|| today.before(this.getEffectiveFrom());
 	}
 }
