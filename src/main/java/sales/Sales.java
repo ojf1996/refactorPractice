@@ -23,4 +23,9 @@ public class Sales {
 	public void setSupervisor(boolean isSupervisor) {
 		this.isSupervisor = isSupervisor;
 	}
+
+	public boolean isEffectiveToday(Date today) {
+		return today.after(this.getEffectiveTo())
+				|| today.before(this.getEffectiveFrom());
+	}
 }
