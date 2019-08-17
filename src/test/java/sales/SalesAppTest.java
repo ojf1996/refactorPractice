@@ -1,5 +1,6 @@
 package sales;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -126,5 +127,37 @@ public class SalesAppTest {
         verify(mockedSalesDao).getSalesBySalesId(any());
         verify(mockSaleReportDao, times(0)).getReportData(mockedSales);
         verify(mockedEcmService, times(0)).uploadDocument("HAHA I am mocking");
+    }
+
+    @Test
+    public void should_filter_sensitive_data_when_invoke_filterReportData_and_is_not_supervisor() {
+        SalesReportData mockSalesReportData1 = spy(new SalesReportData());
+        mockSalesReportData1.setConfidential(false);
+        when(mockSalesReportData1.getType()).thenReturn("SalesActivity");
+        SalesReportData mockSalesReportData2 = spy(new SalesReportData());
+        mockSalesReportData2.setConfidential(true);
+        when(mockSalesReportData2.getType()).thenReturn("SalesActivity");
+        List<SalesReportData> mockSalesReportDataList = Arrays.asList(mockSalesReportData1, mockSalesReportData2);
+
+        SalesApp salesApp = new SalesApp();
+        List<SalesReportData> filterResult = salesApp.filterReportData(false, mockSalesReportDataList);
+
+        Assert.assertEquals(1, filterResult.size());
+    }
+
+    @Test
+    public void should_return_all_sensitive_data_when_invoke_filterReportData_and_is_supervisor() {
+        SalesReportData mockSalesReportData1 = spy(new SalesReportData());
+        mockSalesReportData1.setConfidential(true);
+        when(mockSalesReportData1.getType()).thenReturn("SalesActivity");
+        SalesReportData mockSalesReportData2 = spy(new SalesReportData());
+        mockSalesReportData2.setConfidential(true);
+        when(mockSalesReportData2.getType()).thenReturn("SalesActivity");
+        List<SalesReportData> mockSalesReportDataList = Arrays.asList(mockSalesReportData1, mockSalesReportData2);
+
+        SalesApp salesApp = new SalesApp();
+        List<SalesReportData> filterResult = salesApp.filterReportData(true, mockSalesReportDataList);
+
+        Assert.assertEquals(2, filterResult.size());
     }
 }
