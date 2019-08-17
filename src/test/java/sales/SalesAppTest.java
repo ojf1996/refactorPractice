@@ -160,4 +160,20 @@ public class SalesAppTest {
 
         Assert.assertEquals(2, filterResult.size());
     }
+
+    @Test
+    public void should_limit_sales_report_data_when_maxRow_is_defined() {
+        SalesReportData mockSalesReportData1 = spy(new SalesReportData());
+        mockSalesReportData1.setConfidential(false);
+        when(mockSalesReportData1.getType()).thenReturn("SalesActivity");
+        SalesReportData mockSalesReportData2 = spy(new SalesReportData());
+        mockSalesReportData2.setConfidential(false);
+        when(mockSalesReportData2.getType()).thenReturn("SalesActivity");
+        List<SalesReportData> mockSalesReportDataList = Arrays.asList(mockSalesReportData1, mockSalesReportData2);
+
+        SalesApp salesApp = new SalesApp();
+        List<SalesReportData> filterResult = salesApp.generateLimitedReport(mockSalesReportDataList, 1);
+
+        Assert.assertEquals(1, filterResult.size());
+    }
 }
